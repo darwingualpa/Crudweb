@@ -1,5 +1,6 @@
 ﻿using Crud.Data;
 using Crud.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Crud.Controllers
-{
+{[Authorize]
     public class PersonassController : Controller
     {
         private readonly ApplicationDbContext _applicationDbContext;
@@ -16,6 +17,8 @@ namespace Crud.Controllers
             _applicationDbContext = applicationDbContext;
 
         }
+
+        [Authorize (Roles ="Rey,Peon")]
         public IActionResult Index()
         {
             List<Persona> personas = new List<Persona>();
@@ -23,7 +26,7 @@ namespace Crud.Controllers
 
             return View(personas);
         }
-
+        [Authorize(Roles = "Rey,Peon")]
         public IActionResult Details(int id) 
         {
             if (id ==0)
@@ -33,13 +36,14 @@ namespace Crud.Controllers
                 return RedirectToAction("Index");
             return View(persona);
         }
-
+        [Authorize(Roles = "Rey")]
         public IActionResult Create()
         {
          
 
             return View();
         }
+        [Authorize(Roles = "Peon")]
         [HttpPost]
         public IActionResult Create(Persona persona)
         {
@@ -55,9 +59,10 @@ namespace Crud.Controllers
 
                 return View(persona);
             }
-
+           
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Rey")]
         public IActionResult Edit(int id) 
         {
             if (id == 0)
@@ -70,6 +75,7 @@ namespace Crud.Controllers
                 return RedirectToActionPermanent("Index");
                 return View(persona);
         }
+        [Authorize(Roles = "Rey")]
         [HttpPost]
         public IActionResult Edit(int id,Persona persona)
         {
@@ -89,6 +95,7 @@ namespace Crud.Controllers
 
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Rey")]
         public IActionResult Delete(int id)
         {
             if (id == 0)
@@ -109,6 +116,7 @@ namespace Crud.Controllers
                 return RedirectToActionPermanent("Index");
            
         }
+        [Authorize(Roles = "Rey")]
         public IActionResult Desactivar(int id)
         {
             if (id == 0)
@@ -130,6 +138,7 @@ namespace Crud.Controllers
             return RedirectToActionPermanent("Index");
 
         }
+        [Authorize(Roles = "Rey")]
         public IActionResult Activar(int id)
         {
             if (id == 0)

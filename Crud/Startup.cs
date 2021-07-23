@@ -30,11 +30,25 @@ namespace Crud
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<ApplicationUser, UserRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            
+            services.ConfigureApplicationCookie(D =>
+            {
+                D.Cookie.HttpOnly = true;
+                D.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                D.LoginPath = "/Identity/Account/Login";
+                D.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                D.SlidingExpiration = true;
+            }
+            );
             services.AddControllersWithViews();
+            services.AddRazorPages();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

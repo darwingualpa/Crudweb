@@ -5,14 +5,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+
 namespace Crud.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, UserRole,String>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-
+      
         }
 
         public virtual DbSet<Persona> Persona { get; set; }
@@ -40,7 +41,7 @@ namespace Crud.Data
                
                 
                 en.Property(e => e.Estado)
-          //.IsRequired()
+          .IsRequired()
           //.HasMaxLength(250)
           .IsUnicode(false);
 
